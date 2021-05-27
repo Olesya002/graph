@@ -1,0 +1,16 @@
+t = readtable('g_edges.csv');
+targs = t.Target';
+srcs = t.Source';
+gr = digraph(srcs,targs);
+names = gr.Nodes;
+deg = indegree(gr);
+tt = sortrows ( [names array2table(deg)], 2 ,'descend');
+top5 = tt(1:5, :);
+sizesColors = zeros( length(deg),1 );
+
+for i = 1:length(deg)
+    sizesColors(i) = 2*sqrt( deg(i) - min( deg )) + 0.2;
+end
+
+plot(gr,'NodeLabel',table2cell( gr.Nodes ),'MarkerSize',sizesColors,'NodeCData',sizesColors, 'NodeColor','flat','Layout','layered');
+path = shortestpath(gr,'NED','TYRION');
